@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 19-05-2021 a las 16:10:32
+-- Tiempo de generación: 21-05-2021 a las 01:29:02
 -- Versión del servidor: 10.4.18-MariaDB
 -- Versión de PHP: 8.0.3
 
@@ -42,7 +42,7 @@ CREATE TABLE `tbl_envíos` (
   `ID_ENVÍO` int(11) NOT NULL,
   `DESCRIPCIÓN_ENVÍO` varchar(300) NOT NULL,
   `FECHA` date NOT NULL,
-  `DIRECCIÓN` varchar(150) NOT NULL
+  `ID_DIRECCION` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -55,7 +55,7 @@ CREATE TABLE `tbl_facturas` (
   `ID_FACTURA` int(11) NOT NULL,
   `DESCRIPCIÓN_FACTURA` varchar(200) NOT NULL,
   `FECHA` date NOT NULL,
-  `DIRECCIÓN` varchar(200) NOT NULL
+  `ID_DIRECCION` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -68,7 +68,7 @@ CREATE TABLE `tbl_inventario` (
   `ID_PRODUCTO` int(20) NOT NULL,
   `PRODUCTO` varchar(100) NOT NULL,
   `PRECIO` double NOT NULL,
-  `DIRECCIÓN` varchar(200) NOT NULL
+  `ID_DIRECCION` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -81,7 +81,7 @@ CREATE TABLE `tbl_pedidos` (
   `ID_PEDIDO` int(11) NOT NULL,
   `DESCRIPCIÓN_PEDIDO` varchar(200) NOT NULL,
   `FECHA` date NOT NULL,
-  `DIRECCIÓN` varchar(200) NOT NULL
+  `ID_DIRECCION` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -98,25 +98,29 @@ ALTER TABLE `tbl_direcciones`
 -- Indices de la tabla `tbl_envíos`
 --
 ALTER TABLE `tbl_envíos`
-  ADD PRIMARY KEY (`ID_ENVÍO`);
+  ADD PRIMARY KEY (`ID_ENVÍO`),
+  ADD KEY `FK_DIRECCIONES_ENVIOS` (`ID_DIRECCION`);
 
 --
 -- Indices de la tabla `tbl_facturas`
 --
 ALTER TABLE `tbl_facturas`
-  ADD PRIMARY KEY (`ID_FACTURA`);
+  ADD PRIMARY KEY (`ID_FACTURA`),
+  ADD KEY `FK_DIRECCIONES_FACTURAS` (`ID_DIRECCION`);
 
 --
 -- Indices de la tabla `tbl_inventario`
 --
 ALTER TABLE `tbl_inventario`
-  ADD PRIMARY KEY (`ID_PRODUCTO`);
+  ADD PRIMARY KEY (`ID_PRODUCTO`),
+  ADD KEY `FK_DIRECCIONES_INVENTARIO` (`ID_DIRECCION`);
 
 --
 -- Indices de la tabla `tbl_pedidos`
 --
 ALTER TABLE `tbl_pedidos`
-  ADD PRIMARY KEY (`ID_PEDIDO`);
+  ADD PRIMARY KEY (`ID_PEDIDO`),
+  ADD KEY `FK_DIRECCIONES_PEDIDOS` (`ID_DIRECCION`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -151,6 +155,34 @@ ALTER TABLE `tbl_inventario`
 --
 ALTER TABLE `tbl_pedidos`
   MODIFY `ID_PEDIDO` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `tbl_envíos`
+--
+ALTER TABLE `tbl_envíos`
+  ADD CONSTRAINT `FK_ENVIOS_DIRECCIONES` FOREIGN KEY (`ID_DIRECCION`) REFERENCES `tbl_direcciones` (`ID_DIRECCIÓN`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `tbl_facturas`
+--
+ALTER TABLE `tbl_facturas`
+  ADD CONSTRAINT `FK_FACTURAS_DIRECCIONES` FOREIGN KEY (`ID_DIRECCION`) REFERENCES `tbl_direcciones` (`ID_DIRECCIÓN`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `tbl_inventario`
+--
+ALTER TABLE `tbl_inventario`
+  ADD CONSTRAINT `FK_DIRECCIONES_DIRECCIONES` FOREIGN KEY (`ID_DIRECCION`) REFERENCES `tbl_direcciones` (`ID_DIRECCIÓN`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `tbl_pedidos`
+--
+ALTER TABLE `tbl_pedidos`
+  ADD CONSTRAINT `FK_PEDIDOS_DIRECCIONES` FOREIGN KEY (`ID_DIRECCION`) REFERENCES `tbl_direcciones` (`ID_DIRECCIÓN`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
